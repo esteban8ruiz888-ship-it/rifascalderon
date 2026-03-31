@@ -13,7 +13,7 @@ interface Codigo {
   combo: string
   usado: boolean
   creado_en: string
-  compradores: Comprador | null
+  compradores: Comprador[] | null
 }
 
 interface Props {
@@ -63,10 +63,10 @@ export default function TablaCodigos({ codigos }: Props) {
                   </span>
                 </td>
                 <td className="py-3 pr-4 text-[#FAF6EE]">
-                  {c.compradores ? (
+                  {c.compradores?.[0] ? (
                     <div>
-                      <p className="font-medium">{c.compradores.nombre}</p>
-                      <p className="text-[#9E8A60] text-xs">{c.compradores.telefono}</p>
+                      <p className="font-medium">{c.compradores[0].nombre}</p>
+                      <p className="text-[#9E8A60] text-xs">{c.compradores[0].telefono}</p>
                     </div>
                   ) : (
                     <span className="text-[#9E8A60]">—</span>
