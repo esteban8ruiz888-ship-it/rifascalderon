@@ -11,7 +11,6 @@ interface Rifa {
   descripcion: string | null
   total_puestos: number
   puestos_vendidos: number
-  imagen_url: string | null
   estado: string
   fecha_sorteo: string | null
 }
@@ -20,7 +19,7 @@ async function getRifaActiva(): Promise<Rifa | null> {
   const supabase = createServerClient()
   const { data } = await supabase
     .from('rifas')
-    .select('id, nombre, premio, descripcion, total_puestos, puestos_vendidos, imagen_url, estado, fecha_sorteo')
+    .select('id, nombre, premio, descripcion, total_puestos, puestos_vendidos, estado, fecha_sorteo')
     .eq('estado', 'activa')
     .single()
   return data ?? null
