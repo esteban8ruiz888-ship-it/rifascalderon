@@ -11,7 +11,8 @@ export async function GET() {
     .single()
 
   if (error || !data) {
-    return NextResponse.json({ error: 'No hay rifa activa' }, { status: 404 })
+    console.error('rifa-activa error:', error)
+    return NextResponse.json({ error: error?.message ?? 'No hay rifa activa' }, { status: 404 })
   }
 
   return NextResponse.json(data)
