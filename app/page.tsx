@@ -172,8 +172,22 @@ export default async function HomePage() {
               </div>
 
               {rifa && (
-                <div className="bg-[#1A1612] border border-[#C9A84C]/30 rounded-2xl p-4">
-                  <p className="text-[#C9A84C] text-xs uppercase tracking-widest font-bold text-center mb-3">
+                <div className="bg-[#1A1612] border border-[#C9A84C]/30 rounded-2xl p-4 space-y-3">
+                  {rifa.fecha_sorteo && (
+                    <div className="flex items-center justify-center gap-2 bg-[#C9A84C]/10 border border-[#C9A84C]/30 rounded-xl px-4 py-2">
+                      <span className="text-[#C9A84C] text-sm">📅</span>
+                      <p className="text-[#E8C97A] text-sm font-semibold">
+                        Sorteo:{' '}
+                        {new Date(rifa.fecha_sorteo).toLocaleDateString('es-CO', {
+                          weekday: 'long',
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                        })}
+                      </p>
+                    </div>
+                  )}
+                  <p className="text-[#C9A84C] text-xs uppercase tracking-widest font-bold text-center">
                     Ventas en tiempo real
                   </p>
                   <BarraProgreso
