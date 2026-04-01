@@ -11,7 +11,7 @@ async function getDashboardData() {
   const [rifaRes, codigosRes, compradoresRes] = await Promise.all([
     supabase
       .from('rifas')
-      .select('id, nombre, premio, total_puestos, puestos_vendidos, estado')
+      .select('id, nombre, premio, total_puestos, puestos_vendidos, estado, fecha_sorteo')
       .eq('estado', 'activa')
       .maybeSingle(),
     supabase
