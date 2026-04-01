@@ -4,14 +4,10 @@ import { useState } from 'react'
 import Header from '@/components/Header'
 import Link from 'next/link'
 
-interface NumeroAsignado {
-  numero: number
-}
-
 interface Participacion {
   rifa_nombre: string
   premio: string
-  numeros: NumeroAsignado[]
+  numeros: number[]
   fecha: string
 }
 
@@ -127,10 +123,10 @@ export default function MisNumerosPage() {
                       <div className="flex flex-wrap gap-2">
                         {p.numeros.map((n) => (
                           <span
-                            key={n.numero}
+                            key={n}
                             className="bg-[#2C2518] border border-[#C9A84C]/50 text-[#E8C97A] font-mono font-bold text-base px-3 py-2 rounded-lg min-w-[3.5rem] text-center"
                           >
-                            {String(n.numero).padStart(4, '0')}
+                            {String(n).padStart(4, '0')}
                           </span>
                         ))}
                       </div>
