@@ -53,5 +53,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: error.message ?? 'Error de conexión. Intenta de nuevo.' }, { status: 500 })
   }
 
-  return NextResponse.json(data)
+  const row = Array.isArray(data) ? data[0] : data
+  if (!row) {
+    return NextResponse.json({ error: 'No se pudo procesar el código.' }, { status: 500 })
+  }
+  return NextResponse.json(row)
 }
