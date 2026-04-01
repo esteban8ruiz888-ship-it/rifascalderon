@@ -49,7 +49,8 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       )
     }
-    return NextResponse.json({ error: 'Error de conexión. Intenta de nuevo.' }, { status: 500 })
+    console.error('usar_codigo error:', error)
+    return NextResponse.json({ error: error.message ?? 'Error de conexión. Intenta de nuevo.' }, { status: 500 })
   }
 
   return NextResponse.json(data)
