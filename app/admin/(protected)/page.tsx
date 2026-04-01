@@ -1,8 +1,9 @@
 import { createServerClient } from '@/lib/supabase/server'
-import GeneradorCodigos from '@/components/admin/GeneradorCodigos'
 import TablaCodigos from '@/components/admin/TablaCodigos'
 import TablaCompradores from '@/components/admin/TablaCompradores'
 import SorteoAdmin from '@/components/admin/SorteoAdmin'
+import GestionRifa from '@/components/admin/GestionRifa'
+import RegistrarComprador from '@/components/admin/RegistrarComprador'
 
 async function getDashboardData() {
   const supabase = createServerClient()
@@ -10,7 +11,7 @@ async function getDashboardData() {
   const [rifaRes, codigosRes, compradoresRes] = await Promise.all([
     supabase
       .from('rifas')
-      .select('id, nombre, premio, total_numeros, numeros_vendidos, estado')
+      .select('id, nombre, premio, total_puestos, puestos_vendidos, estado')
       .eq('estado', 'activa')
       .maybeSingle(),
     supabase
@@ -36,62 +37,60 @@ export default async function AdminPage() {
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? ''
 
   const codigosUsados = codigos.filter((c) => c.usado).length
-  const totalVendidos = rifa?.numeros_vendidos ?? 0
-  const totalNumeros = rifa?.total_numeros ?? 10000
+  const totalVendidos = rifa?.puestos_vendidos ?? 0
+  const totalNumeros = rifa?.total_puestos ?? 10000
   const porcentaje = ((totalVendidos / totalNumeros) * 100).toFixed(1)
-
-  if (!rifa) {
-    return (
-      <div className="text-center py-20">
-        <p className="text-[#9E8A60] text-lg">No hay rifa activa.</p>
-        <p className="text-[#9E8A60] text-sm mt-2">Crea una rifa en Supabase para comenzar.</p>
-      </div>
-    )
-  }
 
   return (
     <div className="space-y-8">
-      {/* Métricas */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {[
-          { label: 'Compradores', valor: compradores.length },
-          { label: 'Números vendidos', valor: totalVendidos.toLocaleString('es-CO') },
-          { label: 'Puestos disponibles', valor: (totalNumeros - totalVendidos).toLocaleString('es-CO') },
-          { label: 'Ocupación', valor: `${porcentaje}%` },
-        ].map((m) => (
-          <div
-            key={m.label}
-            className="bg-[#1A1612] border border-[rgba(201,168,76,0.2)] rounded-xl p-4 text-center"
-          >
-            <p className="text-[#E8C97A] font-bold text-2xl">{m.valor}</p>
-            <p className="text-[#9E8A60] text-xs mt-1">{m.label}</p>
+      {/* Gestión de rifa */}
+      <GestionRifa rifa={rifa} />
+
+      {/* Métricas (solo si hay rifa activa) */}
+      {rifa && (
+        <>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { label: 'Compradores', valor: compradores.length },
+              { label: 'Números vendidos', valor: totalVendidos.toLocaleString('es-CO') },
+              { label: 'Puestos disponibles', valor: (totalNumeros - totalVendidos).toLocaleString('es-CO') },
+              { label: 'Ocupación', valor: `${porcentaje}%` },
+            ].map((m) => (
+              <div
+                key={m.label}
+                className="bg-[#1A1612] border border-[rgba(201,168,76,0.2)] rounded-xl p-4 text-center"
+              >
+                <p className="text-[#E8C97A] font-bold text-2xl">{m.valor}</p>
+                <p className="text-[#9E8A60] text-xs mt-1">{m.label}</p>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
 
-      {/* Métricas de códigos */}
-      <div className="grid grid-cols-2 gap-4">
-        <div className="bg-[#1A1612] border border-[rgba(201,168,76,0.2)] rounded-xl p-4 text-center">
-          <p className="text-[#E8C97A] font-bold text-2xl">{codigos.length}</p>
-          <p className="text-[#9E8A60] text-xs mt-1">Códigos generados (últimos 20)</p>
-        </div>
-        <div className="bg-[#1A1612] border border-[rgba(201,168,76,0.2)] rounded-xl p-4 text-center">
-          <p className="text-[#E8C97A] font-bold text-2xl">{codigosUsados}</p>
-          <p className="text-[#9E8A60] text-xs mt-1">Códigos redimidos</p>
-        </div>
-      </div>
+          {/* Métricas de códigos */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-[#1A1612] border border-[rgba(201,168,76,0.2)] rounded-xl p-4 text-center">
+              <p className="text-[#E8C97A] font-bold text-2xl">{codigos.length}</p>
+              <p className="text-[#9E8A60] text-xs mt-1">Códigos generados (últimos 20)</p>
+            </div>
+            <div className="bg-[#1A1612] border border-[rgba(201,168,76,0.2)] rounded-xl p-4 text-center">
+              <p className="text-[#E8C97A] font-bold text-2xl">{codigosUsados}</p>
+              <p className="text-[#9E8A60] text-xs mt-1">Códigos redimidos</p>
+            </div>
+          </div>
 
-      {/* Generador + Tabla códigos */}
-      <div className="grid md:grid-cols-2 gap-6">
-        <GeneradorCodigos rifaId={rifa.id} whatsappNumber={whatsappNumber} />
-        <TablaCodigos codigos={codigos as Parameters<typeof TablaCodigos>[0]['codigos']} />
-      </div>
+          {/* Generador + Tabla códigos */}
+          <div className="grid md:grid-cols-2 gap-6">
+            <RegistrarComprador rifaId={rifa.id} whatsappNumber={whatsappNumber} />
+            <TablaCodigos codigos={codigos as Parameters<typeof TablaCodigos>[0]['codigos']} />
+          </div>
 
-      {/* Sorteo */}
-      <SorteoAdmin rifaId={rifa.id} rifaEstado={rifa.estado} />
+          {/* Sorteo */}
+          <SorteoAdmin rifaId={rifa.id} rifaEstado={rifa.estado} />
 
-      {/* Compradores */}
-      <TablaCompradores compradores={compradores as Parameters<typeof TablaCompradores>[0]['compradores']} />
+          {/* Compradores */}
+          <TablaCompradores compradores={compradores as Parameters<typeof TablaCompradores>[0]['compradores']} />
+        </>
+      )}
     </div>
   )
 }

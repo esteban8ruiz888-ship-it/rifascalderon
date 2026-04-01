@@ -10,8 +10,8 @@ interface Rifa {
   premio: string
   descripcion: string | null
   precio_por_numero: number
-  total_numeros: number
-  numeros_vendidos: number
+  total_puestos: number
+  puestos_vendidos: number
   imagen_url: string | null
   estado: string
   fecha_sorteo: string | null
@@ -21,7 +21,7 @@ async function getRifaActiva(): Promise<Rifa | null> {
   const supabase = createServerClient()
   const { data } = await supabase
     .from('rifas')
-    .select('id, nombre, premio, descripcion, precio_por_numero, total_numeros, numeros_vendidos, imagen_url, estado, fecha_sorteo')
+    .select('id, nombre, premio, descripcion, precio_por_numero, total_puestos, puestos_vendidos, imagen_url, estado, fecha_sorteo')
     .eq('estado', 'activa')
     .single()
   return data ?? null
@@ -178,8 +178,8 @@ export default async function HomePage() {
                   </p>
                   <BarraProgreso
                     rifaId={rifa.id}
-                    totalNumeros={rifa.total_numeros}
-                    numerosVendidosInicial={rifa.numeros_vendidos}
+                    totalNumeros={rifa.total_puestos}
+                    numerosVendidosInicial={rifa.puestos_vendidos}
                   />
                 </div>
               )}

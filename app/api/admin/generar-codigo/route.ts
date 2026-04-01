@@ -7,17 +7,18 @@ export async function POST(req: NextRequest) {
   if (guard) return guard
 
   const body = await req.json().catch(() => null)
-  const { rifa_id, cantidad, combo } = body ?? {}
+  const { rifa_id, combo, valor } = body ?? {}
 
-  if (!rifa_id || !cantidad || !combo) {
-    return NextResponse.json({ error: 'Faltan campos: rifa_id, cantidad, combo' }, { status: 400 })
+  if (!rifa_id || !combo || !valor) {
+    return NextResponse.json({ error: 'Faltan campos: rifa_id, combo, valor' }, { status: 400 })
   }
 
   const supabase = createServerClient()
 
   const { data: codigoData, error: codigoError } = await supabase.rpc('generar_codigo_unico')
   if (codigoError || !codigoData) {
-    return NextResponse.json({ error: 'No se pudo generar el código' }, { status: 500 })
+    console.error('Error generando código único:', codigoError)
+    return NextResponse.json({ error: codigoError?.message ?? 'No se pudo generar el código' }, { status: 500 })
   }
 
   const { data, error } = await supabase
@@ -25,14 +26,15 @@ export async function POST(req: NextRequest) {
     .insert({
       rifa_id,
       codigo: codigoData,
-      cantidad,
       combo,
+      valor,
     })
     .select()
     .single()
 
   if (error) {
-    return NextResponse.json({ error: 'Error al guardar el código' }, { status: 500 })
+    console.error('Error guardando código:', error)
+    return NextResponse.json({ error: error.message }, { status: 500 })
   }
 
   return NextResponse.json(data)

@@ -26,7 +26,7 @@ export default function BarraProgreso({ rifaId, totalNumeros, numerosVendidosIni
           filter: `id=eq.${rifaId}`,
         },
         (payload) => {
-          const nuevosVendidos = payload.new?.numeros_vendidos
+          const nuevosVendidos = payload.new?.puestos_vendidos
           if (typeof nuevosVendidos === 'number') {
             setVendidos(nuevosVendidos)
           }
