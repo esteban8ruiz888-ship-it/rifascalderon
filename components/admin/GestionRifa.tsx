@@ -43,7 +43,7 @@ export default function GestionRifa({ rifa }: Props) {
           id: rifa?.id,
           nombre: nombre.trim(),
           premio: premio.trim(),
-          valor_premio: Number(valorPremio),
+          valor_premio: valorPremio ? Number(valorPremio) : null,
           total_puestos: Number(totalNumeros),
           fecha_sorteo: fechaSorteo || null,
         }),
@@ -114,7 +114,6 @@ export default function GestionRifa({ rifa }: Props) {
             onChange={(e) => setValorPremio(e.target.value)}
             placeholder="Ej. 1500000"
             min={0}
-            required
             className="w-full bg-[#2C2518] border border-[rgba(201,168,76,0.2)] rounded-lg px-4 py-2.5 text-[#FAF6EE] placeholder-[#9E8A60] focus:outline-none focus:border-[#C9A84C] text-sm"
           />
         </div>
