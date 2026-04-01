@@ -6,7 +6,7 @@ export async function GET() {
 
   const { data, error } = await supabase
     .from('rifas')
-    .select('id, nombre, premio, descripcion, precio_por_numero, total_puestos, puestos_vendidos, imagen_url, estado, fecha_sorteo')
+    .select('id, nombre, premio, descripcion, total_puestos, puestos_vendidos, imagen_url, estado, fecha_sorteo')
     .eq('estado', 'activa')
     .single()
 
