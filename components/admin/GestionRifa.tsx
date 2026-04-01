@@ -43,7 +43,7 @@ export default function GestionRifa({ rifa }: Props) {
           id: rifa?.id,
           nombre: nombre.trim(),
           premio: premio.trim(),
-          valor_premio: valorPremio ? Number(valorPremio) : null,
+          valor_premio: valorPremio ? Number(valorPremio) : 0,
           total_puestos: Number(totalNumeros),
           fecha_sorteo: fechaSorteo || null,
         }),

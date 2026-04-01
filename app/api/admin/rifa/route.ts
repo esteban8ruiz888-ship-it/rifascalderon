@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     // Editar rifa existente
     const { data, error } = await supabase
       .from('rifas')
-      .update({ nombre, premio, valor_premio: valor_premio ? Number(valor_premio) : null, total_puestos: Number(total_puestos), fecha_sorteo: fecha_sorteo ?? null })
+      .update({ nombre, premio, valor_premio: valor_premio ? Number(valor_premio) : 0, total_puestos: Number(total_puestos), fecha_sorteo: fecha_sorteo ?? null })
       .eq('id', id)
       .select()
       .single()
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
     // Crear rifa nueva
     const { data, error } = await supabase
       .from('rifas')
-      .insert({ nombre, premio, valor_premio: valor_premio ? Number(valor_premio) : null, total_puestos: Number(total_puestos), fecha_sorteo: fecha_sorteo ?? null, estado: 'activa' })
+      .insert({ nombre, premio, valor_premio: valor_premio ? Number(valor_premio) : 0, total_puestos: Number(total_puestos), fecha_sorteo: fecha_sorteo ?? null, estado: 'activa' })
       .select()
       .single()
 
