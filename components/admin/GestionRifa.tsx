@@ -9,6 +9,7 @@ interface Rifa {
   premio: string
   total_puestos: number
   estado: string
+  fecha_sorteo: string | null
 }
 
 interface Props {
@@ -20,6 +21,7 @@ export default function GestionRifa({ rifa }: Props) {
   const [nombre, setNombre] = useState(rifa?.nombre ?? '')
   const [premio, setPremio] = useState(rifa?.premio ?? '')
   const [totalNumeros, setTotalNumeros] = useState(String(rifa?.total_puestos ?? 10000))
+  const [fechaSorteo, setFechaSorteo] = useState(rifa?.fecha_sorteo ? rifa.fecha_sorteo.slice(0, 10) : '')
   const [cargando, setCargando] = useState(false)
   const [error, setError] = useState('')
   const [exito, setExito] = useState('')
@@ -40,6 +42,7 @@ export default function GestionRifa({ rifa }: Props) {
           nombre: nombre.trim(),
           premio: premio.trim(),
           total_puestos: Number(totalNumeros),
+          fecha_sorteo: fechaSorteo || null,
         }),
       })
       const data = await res.json()
@@ -109,6 +112,18 @@ export default function GestionRifa({ rifa }: Props) {
             min={1}
             required
             className="w-full bg-[#2C2518] border border-[rgba(201,168,76,0.2)] rounded-lg px-4 py-2.5 text-[#FAF6EE] placeholder-[#9E8A60] focus:outline-none focus:border-[#C9A84C] text-sm"
+          />
+        </div>
+
+        <div>
+          <label className="block text-[#9E8A60] text-xs uppercase tracking-wider mb-1">
+            Fecha del sorteo
+          </label>
+          <input
+            type="date"
+            value={fechaSorteo}
+            onChange={(e) => setFechaSorteo(e.target.value)}
+            className="w-full bg-[#2C2518] border border-[rgba(201,168,76,0.2)] rounded-lg px-4 py-2.5 text-[#FAF6EE] focus:outline-none focus:border-[#C9A84C] text-sm"
           />
         </div>
 

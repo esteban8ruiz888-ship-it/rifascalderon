@@ -7,10 +7,10 @@ export async function POST(req: NextRequest) {
   if (guard) return guard
 
   const body = await req.json().catch(() => null)
-  const { id, nombre, premio, total_numeros } = body ?? {}
+  const { id, nombre, premio, total_puestos, fecha_sorteo } = body ?? {}
 
-  if (!nombre || !premio || !total_numeros) {
-    return NextResponse.json({ error: 'Faltan campos: nombre, premio, total_numeros' }, { status: 400 })
+  if (!nombre || !premio || !total_puestos) {
+    return NextResponse.json({ error: 'Faltan campos: nombre, premio, total_puestos' }, { status: 400 })
   }
 
   const supabase = createServerClient()
@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     // Editar rifa existente
     const { data, error } = await supabase
       .from('rifas')
-      .update({ nombre, premio, total_puestos: Number(total_numeros) })
+      .update({ nombre, premio, total_puestos: Number(total_puestos), fecha_sorteo: fecha_sorteo ?? null })
       .eq('id', id)
       .select()
       .single()
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
     // Crear rifa nueva
     const { data, error } = await supabase
       .from('rifas')
-      .insert({ nombre, premio, total_puestos: Number(total_numeros), estado: 'activa' })
+      .insert({ nombre, premio, total_puestos: Number(total_puestos), fecha_sorteo: fecha_sorteo ?? null, estado: 'activa' })
       .select()
       .single()
 
