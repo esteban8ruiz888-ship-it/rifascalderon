@@ -117,31 +117,10 @@ export default function ModalCompra({ rifaNombre, whatsappNumber, nequiNumber, o
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <p className="text-[#9E8A60] text-xs uppercase tracking-wider">Elige tu combo</p>
-                <div className="grid grid-cols-3 gap-2">
-                  {COMBOS.map((c) => (
-                    <button
-                      key={c.cantidad}
-                      onClick={() => setComboSeleccionado(c.cantidad)}
-                      className={`p-3 rounded-lg border text-center transition-colors ${
-                        comboSeleccionado === c.cantidad
-                          ? 'border-[#C9A84C] bg-[#C9A84C]/10 text-[#E8C97A]'
-                          : 'border-[rgba(201,168,76,0.2)] text-[#9E8A60] hover:border-[#C9A84C]/50'
-                      }`}
-                    >
-                      <div className="font-bold text-lg">{c.cantidad}</div>
-                      <div className="text-xs">números</div>
-                      <div className="text-xs font-semibold mt-1">{c.precio}</div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
               <div className="flex gap-3">
                 <a
                   href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-                    `Hola, quiero participar en la rifa "${rifaNombre}"${comboSeleccionado ? ` con el combo de ${comboSeleccionado} números` : ''}. Adjunto mi comprobante de pago.`
+                    `Hola, quiero participar en la rifa "${rifaNombre}". Adjunto mi comprobante de pago.`
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
